@@ -38,7 +38,7 @@ int Train::calculateLength() {
 
     runner->lamp = false;
 
-    Wagon* backtrack = runner;
+    const Wagon* backtrack = runner;
     for (int i = 0; i < forwardSteps; ++i) {
       backtrack = backtrack->prev;
       ++stepCounter;
