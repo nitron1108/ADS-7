@@ -1,52 +1,51 @@
+// Copyright 2022 NNTU-CS
 #include "train.h"
 
-Train::Train() : start(nullptr), stepCounter(0) {}
+Train::Train() : entryPoint(nullptr), stepCounter(0) {}
 
 void Train::addWagon(bool lampState) {
-  Wagon* unit = new Wagon{lampState, nullptr, nullptr};
-  if (!start) {
-    start = unit;
-    unit->next = unit;
-    unit->prev = unit;
+  Wagon* fresh = new Wagon{lampState, nullptr, nullptr};
+  if (!entryPoint) {
+    entryPoint = fresh;
+    fresh->next = fresh;
+    fresh->prev = fresh;
   } else {
-    Wagon* tail = start->prev;
-    tail->next = unit;
-    unit->prev = tail;
-    unit->next = start;
-    start->prev = unit;
+    Wagon* tail = entryPoint->prev;
+    fresh->next = entryPoint;
+    fresh->prev = tail;
+    tail->next = fresh;
+    entryPoint->prev = fresh;
   }
 }
 
 int Train::calculateLength() {
-  if (!start) return 0;
+  if (!entryPoint) return 0;
 
   stepCounter = 0;
-  Wagon* pointer = start;
+  Wagon* current = entryPoint;
 
-  if (!pointer->lamp) {
-    pointer->lamp = true;
-  }
+  if (!current->lamp) current->lamp = true;
 
   while (true) {
-    int distance = 0;
-    Wagon* forward = pointer;
+    int forwardSteps = 0;
+    Wagon* runner = current;
 
     do {
-      forward = forward->next;
-      distance++;
-      stepCounter++;
-    } while (!forward->lamp);
+      runner = runner->next;
+      ++forwardSteps;
+      ++stepCounter;
+    } while (!runner->lamp);
 
-    forward->lamp = false;
+    runner->lamp = false;
 
-    Wagon* backtrack = forward;
-    for (int i = 0; i < distance; i++) {
+    Wagon* backtrack = runner;
+    for (int i = 0; i < forwardSteps; ++i) {
       backtrack = backtrack->prev;
-      stepCounter++;
+      ++stepCounter;
     }
 
-    if (backtrack == pointer && !backtrack->lamp) {
-      return distance;
+    if (backtrack == current && !backtrack->lamp) {
+      return forwardSteps;
     }
   }
 }
