@@ -1,20 +1,17 @@
+// Copyright 2022 NNTU-CS
 #include <iostream>
 #include "train.h"
 
 int main() {
-  Train t;
+  Train train;
 
-  const int total = 60; // можно менять
-
-  for (int i = 0; i < total; ++i) {
-    t.addWagon(false);  // можно поменять на true или рандом для эксперимента
+  const int wagonCount = 60;  // количество вагонов
+  for (int i = 0; i < wagonCount; ++i) {
+    train.addCar(false);  // все лампы выключены
   }
 
-  int length = t.calculateLength();
-  int ops = t.getStepCount();
-
-  std::cout << "Length of the train: " << length << '\n';
-  std::cout << "Number of steps taken: " << ops << '\n';
+  std::cout << "Train length: " << train.getLength() << std::endl;
+  std::cout << "Operations count: " << train.getOpCount() << std::endl;
 
   return 0;
 }
